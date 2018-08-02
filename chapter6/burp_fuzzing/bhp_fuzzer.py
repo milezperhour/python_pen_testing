@@ -25,7 +25,7 @@ def getGeneratorName(self):
 # function that receives the attack parameter and returns an instance of the
 # IIntruderPayloadGenerator class, which is called BHPFuzzer
 def createNewInstance(self, attack):
-    return BHP(self, attack)
+    return BHPFuzzer(self, attack)
 
 
 # BHPFuzzer class that extends IIntruderPayloadGenerator
@@ -34,6 +34,7 @@ class BHPFuzzer(IIntruderPayloadGenerator):
         self._extender     = extender
         self._helpers      = extender._helpers
         self._attack       = attack
+        print 'BHP Fuzzer initialized'
         seld.max_payloads  = 10
         self.num_iterations = 0
 

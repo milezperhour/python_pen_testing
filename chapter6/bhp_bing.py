@@ -1,3 +1,5 @@
+# Blend Jython API and pure Python ina Burp extension
+
 from burp import IBurpExtender # import the IBurpExtender class (required)
 from burp import IIntruderPayloadGeneratorFactory
 

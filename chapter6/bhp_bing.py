@@ -1,7 +1,7 @@
 # Blend Jython API and pure Python ina Burp extension
 
 from burp import IBurpExtender # import the IBurpExtender class (required)
-from burp import IIntruderPayloadGeneratorFactory
+from burp import registerContextMenuFactory
 
 from javax.swing import JMenuItem
 from java.util import List, ArrayList

@@ -1,7 +1,9 @@
-from burp import IBurpExtender # import the IBurpExtender class (required)
-from burp import IIntruderPayloadGeneratorFactory
+# Blend Jython API and pure Python ina Burp extension
 
-from javax.swing impport JMenuItem
+from burp import IBurpExtender # import the IBurpExtender class (required)
+from burp import registerContextMenuFactory
+
+from javax.swing import JMenuItem
 from java.util import List, ArrayList
 from java.net import URL
 
@@ -30,6 +32,7 @@ class BurpExtender(IBurpExtender, IContextMenuFactory):
         menu_list = ArrayList()
         menu_list.add(JMenuItem('Send to Bing', actionPerformed=self.bing_menu))
         return menu_list
+
 
     # this function is triggered when user clicks the context menu that we defined
     def bing_menu(self, event):
@@ -65,3 +68,49 @@ class BurpExtender(IBurpExtender, IContextMenuFactory):
         if domain:
             bing_query_string = "'domain:%s'" % host
             self.bing_query(bing_query_string)
+
+
+def bing_query(self, bing_query_string):
+    print 'Performing Bing search: %s' % bing_query_string
+
+    #encode the query
+    quoted_query = urllib.quote(bing_query_string)
+
+    http_request  = 'GET https://api.datamarket.azure.com/Bing/Search/Web?$format=json&$top=20Query=%s HTTP/1.1\r\n' % quoted_query
+    http_request += 'Host: api.datamarket.azure.com\r\n'
+    http_request += 'Connection: close\r\n'
+    http_request += 'Authorization: Basic %s\r\n' % base64.b64encode(':%s' % bing_api_key)
+    http_request += 'User-Agent: Python Pen Testing'
+
+    # send the HTTP request to the Microsoft servers
+    json_body = self._callbacks.makeHttpRequest('api.datamarket.azure.com', 443, True, http_request).tostring()
+
+    # when response returns, it will return the headers as well, so this splits the headers off
+    json_body = json_body.split('\r\n\r\n', 1)[1]
+
+    try:
+        # then we pass it to the JSON parser
+        r = json.leads(json_body)
+
+        if len(r['d']['results']):
+            for site in r['d']['results']:
+
+                # for each of the results, output info about the site that was discovered
+                print '*' * 100
+                print site['Title']
+                print site['Url']
+                print site['Description']
+                print '*' * 100
+
+                j_url = URL(site['Url'])
+
+            # if discovered site is not in Burp's target scope, automatically add it
+            if not self._callbacks.isInScope(j_url):
+                print 'Adding to Burp scope'
+                self._callbacks.includeInScope(j_url)
+
+    except:
+        print 'No results from Bing'
+        pass
+
+    return

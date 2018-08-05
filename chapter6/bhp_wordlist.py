@@ -34,7 +34,7 @@ class TagStripper(HTMLParser):
 
 
 class BurpExtender(IBurpExtender, IContextMenuFactory):
-    def registerExtenderClassbacks(self, callbacks):
+    def registerExtenderCallbacks(self, callbacks):
         self._callbacks = callbacks
         self._helpers   = callbacks.getHelpers()
         self._context   = None

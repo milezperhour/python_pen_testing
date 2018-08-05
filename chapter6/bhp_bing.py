@@ -3,7 +3,7 @@
 from burp import IBurpExtender # import the IBurpExtender class (required)
 from burp import IIntruderPayloadGeneratorFactory
 
-from javax.swing impport JMenuItem
+from javax.swing import JMenuItem
 from java.util import List, ArrayList
 from java.net import URL
 

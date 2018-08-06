@@ -1,3 +1,9 @@
+# Trojan Framework
+# To use:
+# 1) enter the terminal and input 'python git_trojan.py'
+#    It should connect to repo, grab the config file and pull in the 2 modules
+# 2) next enter: 'git pull origin yourbranch'
+
 import json
 import base64
 import sys

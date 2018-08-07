@@ -1,5 +1,6 @@
 # SCREENSHOT GRABBER
 # Uses Windows Graphics Device Interface (GDI) to dermine image properties and to grab the image
+# To use: simply run this file from the terminal and check your local Directory path to which this img file was saved
 
 import win32gui
 import win32ui
